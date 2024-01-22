@@ -2,6 +2,8 @@
 
 ## Overview of the Project
 
+No LLMs were used for any aspect of this work.
+
 ## File Structure
 The repo is structured as:
 
