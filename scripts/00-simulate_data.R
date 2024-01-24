@@ -1,7 +1,7 @@
 #### Preamble ####
-# Purpose: Simulate the COVID-19 cases 
+# Purpose: Simulate the COVID-19 cases trend as visualised in intial sketches
 # Author: Kaavya Kalani
-# Date: 23 January 2024
+# Date: 24 January 2024
 # Contact: kaavya.kalani@mail.utoronto.ca
 # License: MIT
 # Pre-requisites: none
@@ -9,7 +9,6 @@
 #### Workplace setup ####
 #install.packages("tidyverse")
 library(tidyverse)
-
 
 #### Simulation ####
 set.seed(1007846823)
