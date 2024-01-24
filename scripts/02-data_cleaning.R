@@ -11,9 +11,7 @@ library(tidyverse)
 library(arrow)
 
 #### Clean data ####
-
-# loads in the raw data
-raw_data <- read_parquet("inputs/data/unedited_data.parquet")
+raw_data <- read_parquet("inputs/data/unedited_data.parquet") # loads in the raw data
 
 cleaned_data <-
   raw_data |> 
