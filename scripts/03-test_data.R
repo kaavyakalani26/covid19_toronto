@@ -1,7 +1,7 @@
 #### Preamble ####
 # Purpose: Tests the cleaned dataset 
 # Author: Kaavya Kalani
-# Date: 23 January 2024
+# Date: 24 January 2024
 # Contact: kaavya.kalani@mail.utoronto.ca
 # License: MIT
 # Pre-requisites: run scripts/01-download_data.R followed by scripts/02-data_cleaning.R
@@ -9,8 +9,8 @@
 #### Workspace setup ####
 library(tidyverse)
 
-#### Clean data ####
-covid19_data <- read_csv("outputs/data/covid19_data.csv")
+#### Test data ####
+covid19_data <- read_csv("outputs/data/covid19_data.csv") # loads the data
 
 #### Test ####
 # datatypes
@@ -31,11 +31,11 @@ all(cleaned_data$classification == "confirmed")
 # all cases before 2022-12-31
 all(cleaned_data$reported_date <= as.Date("2022-12-31"))
 
-# Test 4: Outcome is either resolved or fatal
+# outcome is either resolved or fatal
 all(cleaned_data$outcome %in% c("resolved", "fatal"))
 
-# Test 5: Hospitalised either yes or no
+# hospitalised either yes or no
 all(cleaned_data$hospitalised %in% c("yes", "no"))
 
-# Test 6: ICU either yes or no
+# icu either yes or no
 all(cleaned_data$icu %in% c("yes", "no"))
