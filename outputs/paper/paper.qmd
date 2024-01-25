@@ -1,10 +1,10 @@
 ---
-title: "Unmasking the Grim Reality: Age Disparities in COVID-19 Fatality Rates in Toronto"
+title: "Age-Driven Disparities in COVID-19 Fatality Rates – A Toronto Perspective"
 author: "Kaavya Kalani"
-thanks: "Code and data are available at: https://github.com/kaavyakalani26/covid19_toronto"
+thanks: "Code and data are available at: https://github.com/kaavyakalani26/covid19_toronto.git"
 date: today
 date-format: long
-abstract: "This paper presents a meticulous analysis of COVID-19 cases in Toronto, emphasizing the disproportionate impact on different age groups. Leveraging data from the City of Toronto's Open Data Library, the study scrutinizes fatality rates, revealing a stark contrast between older and younger demographics. From the first reported case in January 2020 to January 2023, our analysis sheds light on the severity of outcomes, with a particular focus on the vulnerability of older individuals. The comprehensive exploration includes data preprocessing details, variable descriptions, and insightful visualizations. Findings underscore the urgency of targeted interventions for the elderly population in pandemic response strategies. The study contributes valuable insights for public health initiatives, emphasizing the need for age-specific considerations in managing and mitigating the impact of COVID-19."
+abstract: "This paper presents an analysis of COVID-19 cases in Toronto, emphasizing the disproportionate impact on different age groups. Leveraging data from the City of Toronto's Open Data Library, my analysis sheds light on the severity of outcomes, with a particular focus on the vulnerability of older individuals. This analysis includes data preprocessing details, variable descriptions, and visualizations. Findings underscore the need for targeted interventions for the elderly population in pandemic response strategies."
 format: pdf
 toc: true
 number-sections: true
@@ -16,7 +16,7 @@ bibliography: references.bib
 #| echo: false
 
 #### Preamble ####
-# Purpose: Read the cleaned dataset and use it for our analysis
+# Purpose: Read the cleaned dataset to use it for my analysis
 # Author: Kaavya Kalani
 # Date: 23 January 2024
 # Contact: kaavya.kalani@mail.utoronto.ca
@@ -44,66 +44,201 @@ covid19_data <- read_csv(
 # Introduction
 
 The COVID-19 or the coronavirus pandemic is a global pandemic caused by severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) [@citeWiki]. The novel virus was first identified in Wuhan, China in December 2019, and spread worldwide in early 2020. 
-COVID-19 was declared a pandemic by the World Health Organization on March 11, 2020 [@citeWHO]. This pandemic, to this date, has seen 700 million+ cases and around 7 million deaths [@citeStats]. 
+COVID-19 was declared a pandemic by the World Health Organization on March 11, 2020 [@citeWHO]. As of the present date, the pandemic has resulted in over 700 million reported cases and approximately 7 million deaths worldwide [@citeStats].
 
-We saw people from all over the world falling sick, people of all ages and health conditions. Some studies suggested that old people were more likely to susceptible and in danger from this compared to younger. [@citeOld]
+This unprecedented health crisis has affected individuals across diverse demographics, transcending geographical boundaries and health conditions. Notably, studies have consistently suggested that older individuals face a heightened susceptibility and increased risk of severe outcomes compared to their younger counterparts [@citeOld]. 
 
+In this paper, I try to uncover these trends. I use the data of all the COVID-19 cases reported to Toronto Public Health since the first case which was reported in January 2020 until December 2022. My focus is on investigating age disparities to understand if older individuals exhibit a higher susceptibility to contracting the virus. Additionally, I analyze mortality rates across different age groups, with a specific emphasis on the elderly population to ascertain if age plays a significant role in COVID-19 severity. Further, I explore the correlation between age and the need for hospitalization or ICU admission, shedding light on healthcare utilization patterns. This study aims to contribute insights into the nuanced impact of COVID-19 on diverse age demographics, particularly emphasizing the vulnerability of older individuals. These findings intend to inform targeted public health interventions and strategies.
 
-In this paper, we try to uncover these trends. We use the data of all the COVID-19 cases reported to Toronto Public Health since the first case which was reported in January 2020 until January 2023. My focus is on investigating age disparities to understand if older individuals exhibit a higher susceptibility to contracting the virus. Additionally, I analyze mortality rates across different age groups, with a specific emphasis on the elderly population to ascertain if age plays a significant role in COVID-19 severity. Further, I explore the correlation between age and the need for hospitalization or ICU admission, shedding light on healthcare utilization patterns. This study aims to contribute insights into the nuanced impact of COVID-19 on diverse age demographics, particularly emphasizing the vulnerability of older individuals. These findings intend to inform targeted public health interventions and strategies.
-
-The paper is further organised into three sections: Data, Results, and Conclusion. In the Data section, I discuss how the dataset to be used for the analysis was obtained, pre-processed and cleaned. I will also explain the variables of interest for our analysis in the dataset. The Results section will then highlight and discuss the trends and associations found during the analysis. Lastly, the Conclusion section will summarize the major takeaways from our analysis. 
+The paper is further organised into three sections: Data, Results, and Conclusion. In the Data section, I discuss how the dataset to be used for the analysis was obtained, pre-processed and cleaned. I will also explain the variables of interest in the dataset for my analysis. The Results section will then highlight and discuss the trends and associations found during the analysis. Lastly, the Conclusion section will summarize the major takeaways from my analysis. 
 
 # Data
 
-The data used for analysis in this paper was obtained from the City of Toronto's Open Data Library using the library opendatatoronto [@citeOpenDataToronto]. The dataset is called "COVID-19 Cases in Toronto" [@citeDataset]. Data was cleaned and analysed using the statistical programming software R [@citeR] along with the help of tidyverse [@citeTidyverse], knitr [@citeKnitr], ggplot2 [@citeGgplot], here [@citeHere]
+The data used for analysis in this paper was obtained from the City of Toronto's Open Data Library using the library opendatatoronto [@citeOpenDataToronto]. The dataset is called "COVID-19 Cases in Toronto" [@citeDataset]. Data was cleaned and analysed using the statistical programming software R [@citeR] along with the help tidyverse [@citeTidyverse], knitr [@citeKnitr], ggplot2 [@citeGgplot], here [@citeHere], arrow [@citeArrow].
 
 ## About the dataset
-The "COVID-19 Cases in Toronto" dataset obtained for this analysis contains demographic, geographic, and severity information for all confirmed and probable cases reported to and managed by Toronto Public Health since the first case was reported in January 2020. The data are extracted from the provincial Case & Contact Management System (CCM).[@citeDataset] 
-
-The dataset is completely refreshed and overwritten bi-weekly and the version I extracted was last refreshed on January 17, 2024
+The "COVID-19 Cases in Toronto" dataset obtained for this analysis contains demographic, geographic, and severity information for all confirmed and probable cases reported to and managed by Toronto Public Health since the first case was reported in January 2020. The data are extracted from the provincial Case & Contact Management System (CCM).[@citeDataset] The dataset is overwritten bi-weekly and the version I extracted was last refreshed on January 17, 2024.
 
 ## Preprocessing and data cleaning
-The data was preprocessed and cleaned to contain only the entries that were essential for my analysis. This included me, 
+The data was preprocessed and cleaned to contain only the entries that were essential for my analysis. This included me keeping entries that were confirmed cases which ended up with a known outcome i.e either fatal or resolved. This excluded probable or active cases. Another decision taken was to use records till 31 December, 2022 due to the multiple changes in criteria and updating methods throughout 2023. These decisions helped me refine my dataset and get precise results for my analysis.
 
-- Keeping only confirmed cases. The original dataset included probable cases also but for my analysis, we wanted to find trend among people who were confirmed to have COVID so for precision in trend, we omitted the probable cases.
-
-- Keeping records of cases till Dec 31, 2022. This was because the dataset page documents how criteria and updating methods were changed multiple time throughout 2023. To ensure coherent and similarly-collected data for precision of result, this call was taken.
-
-- Cases which are still active were removed as analysing the outcome of the case is one of my trends to observe which having active cases would not help.
-
-- The last minor cleaning included removing empty age categories as that is a variable of interest and changing the datatype for the Reported date variable.
-
-## Variable of interest
+## Variables of interest
 I have 6 variables I will be using in my analysis from the original dataset. My variables of interest are :
 
-1. ID
+- **ID**
+  - Numerical variable which is a unique row identifier for the database.
 
-Numerical variable which is a unique row identified for the database
+- **Age Group**
+  - Categorical variable for the age at the time of illness (in years) split into 9 groups: ≤19, 20-29, 30-39, 40-49, 50-59, 60-69, 70-79, 80-89, 90+.
 
-2. Age Group
+- **Reported Date**
+  - The date on which the case was reported to Toronto Public Health.
 
-Age at time of illness (in years). This is a categorical variable which is split into 9 groups : ≤19, 20-29, 30-39, 40-49, 50-59, 60-69, 70-79, 80-89, 90+
+- **Outcome**
+  - Categorical variable for the outcome of the case, with two possible values:
+    - **Fatal:**
+      - Any case that has died and has been marked as Outcome equals 'Fatal' and Type of Death does not equal 'Disease of Public Health Significance was unrelated to cause of death' in the provincial reporting system (CCM). [@citeDataset]
+    - **Resolved:**
+      - A case outcome description in CCM of 'Recovered' OR Case outcome description is equal to 'Fatal' AND Type of Death is equal to 'Disease of Public Health Significance was unrelated to cause of death' OR Today's date is more than 14 days from the episode date AND the case is not currently hospitalized/intubated/in ICU AND Case outcome description is not equal to 'Fatal' where Type of Death is not equal to 'Disease of Public Health Significance was unrelated to cause of death'. [@citeDataset]
 
-3. Reported Date
+- **Ever Hospitalized**
+  - Categorical variable taking the value of either "yes" or "no" for whether they were hospitalized related to their COVID-19 infection.
 
-The date on which the case was reported to Toronto Public Health.
+- **Ever in ICU**
+  - Categorical variable taking the value of either "yes" or "no" for whether they were admitted to the intensive care unit (ICU) related to their COVID-19 infection.
 
-4. Outcome
 
-Categorical variable for the outcome of the case. This can either of two values :
+I will now analyse the dataset to uncover trends and draw conclusions.
 
-- Fatal: Any case that has died and has been marked as Outcome equals 'Fatal' and Type of Death does not equal 'Disease of Public Health Significance was unrelated to cause of death' in the provincial reporting system (CCM). [@citeDataset]
+# Results
 
-- Resolved: A case outcome description in CCM of 'Recovered' OR Case outcome description is equal to 'Fatal' AND Type of Death is equal to 'Disease of Public Health Significance was unrelated to cause of death' OR
-Today's date is more than 14 days from episode date AND the case is not currently hospitalized/intubated/in ICU AND Case outcome description is not equal to 'Fatal' where Type of Death is not equal to 'Disease of Public Health Significance was unrelated to cause of death'. [@citeDataset]
+```{r}
+#| message: false
+#| echo: false
+#| label: fig-age-vs-cases
+#| fig-cap: Number of confirm COVID-19 cases for each age group
 
-5. Ever Hospitalized
+# age vs number of cases
 
-Cases that were hospitalized related to their COVID-19 infection (includes cases that are currently hospitalized and those that have been discharged or are deceased). This is a categorical variable taking the value of either "yes" or "no".
+ggplot(covid19_data, aes(x = age_group)) +
+  geom_bar(fill = "skyblue", color = "black") +
+  labs(x = "Age Group",
+       y = "Number of Cases") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
 
-6. Ever in ICU
+The graph depicted in @fig-age-vs-cases illustrates the distribution of confirmed COVID-19 cases across different age groups, offering a snapshot of the affected population. Notably, a discernible trend emerges, with the most of cases observed in the 20 to 29 age group. This observation aligns with the demographic composition of a metropolitan city, where the working-age population tends to be more predominant.
 
-Cases that were admitted to the intensive care unit (ICU) related to their COVID-19 infection (includes cases that are currently in ICU and those that have been discharged or are deceased). This is a categorical variable taking the value of either "yes" or "no".
+The prominence of the 20 to 29 age group can be attributed to the higher interaction levels among the working-class individuals within this range. Their daily activities, social interactions, and workplace engagements may contribute to an elevated risk of exposure to the virus. However, as I traverse older age groups, the number of cases progressively diminishes. This decline can be attributed to factors such as a natural decrease in population numbers due to aging and, unfortunately, mortality rates.
+
+It also becomes evident that relying solely on raw case numbers to comprehend the true impact of COVID-19 across different age groups can be misleading. Given the substantial disparity in population sizes between older and younger demographics, using raw numbers may not accurately capture the relative severity of the virus's effects. Thus, my analysis will use proportions to gain a more accurate understanding of the impact of COVID-19 on diverse age groups. 
+
+```{r}
+#| message: false
+#| echo: false
+#| label: tbl-proportions-outcome
+#| tbl-cap: Statistics for the outcome for confirmed COVID-19 cases.
+
+## outcome proportions
+
+covid19_data %>%
+  group_by(outcome) %>%
+  summarise(count = n(), proportion = n() / nrow(covid19_data)) %>%
+  kable()
+```
+
+The statistics presented in @tbl-proportions-outcome offer an overview of the outcomes for confirmed COVID-19 cases in Toronto. Notably, the majority of cases exhibit a 'resolved' outcome, providing a glimpse of the resilience and recovery of a substantial portion of the affected population. However, a closer examination reveals 1.27% of the cases culminate in a fatal outcome.
+
+While this percentage might appear modest at first glance, its significance becomes apparent when placed in perspective. Considered in absolute terms, it translates to 1 in every 100 individuals who contracted COVID-19 in Toronto meeting a fatal outcome. This stark reality underscores the gravity of the pandemic, aligning with its classification as one of the most lethal global health crises in recent history. [@citeDeadliest]
+
+\newpage
+
+```{r}
+#| message: false
+#| echo: false
+#| label: fig-age-vs-fatality
+#| fig-cap: Outcome proportions for confirmed COVID-19 cases 
+
+# trend for age vs fatality
+
+# Create a summary table
+age_outcome_summary <- covid19_data %>%
+  group_by(age_group, outcome) %>%
+  summarise(Count = n()) %>%
+  group_by(age_group) %>%
+  mutate(Proportion = Count / sum(Count))
+
+# Create a stacked bar plot
+ggplot(age_outcome_summary, aes(x = age_group, y = Proportion, fill = outcome)) +
+  geom_bar(stat = "identity", position = "fill") +
+  labs(x = "Age Group",
+       y = "Proportion",
+       fill = "Outcome") +
+  scale_fill_manual(values = c("resolved" = "green", "fatal" = "red")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+@tbl-proportions-outcome highlighted how 1 in every 100 people ended with a fatal outcome. The insights from @fig-age-vs-fatality underscore a critical aspect of COVID-19 outcomes, particularly when viewed through the lens of different age groups. Notably, the graph reveals a trend in fatality rates, with individuals aged 50 and below exhibiting relatively negligible fatality rates. However, as we progress beyond the age of 50, an exponential increase in fatalities becomes evident. Upon noticing the last group aged 90 and older, a striking 15% of patients are noted to experience a fatal outcome. 
+
+This escalation in fatality rates among the elderly imparts the perspective – older individuals are significantly more endangered when confronted with COVID-19. These findings align with broader epidemiological observations, emphasizing that older age is a significant risk factor for adverse outcomes associated with COVID-19. 
+
+\newpage
+
+```{r}
+#| message: false
+#| echo: false
+#| label: fig-hospitalization-vs-age
+#| fig-cap: Proportion of people who were hospitalised or admitted to the ICU while having COVID-19 
+
+# statistics for the proportion of people who were hospitalized or admitted to the ICU while having COVID-19 
+
+# proportions for hospitalization grouped by age
+hospitalization_proportions <- covid19_data %>%
+  group_by(age_group) %>%
+  summarise(Proportion_Hospitalized = mean(hospitalised == "yes", na.rm = TRUE))
+
+# proportions for ICU admission grouped by age
+icu_proportions <- covid19_data %>%
+  group_by(age_group) %>%
+  summarise(Proportion_ICU = mean(icu == "yes", na.rm = TRUE))
+
+# Merge the summaries
+merged_summary <- merge(hospitalization_proportions, icu_proportions, by = c("age_group"))
+
+# Create a bar plot
+ggplot(merged_summary, aes(x = age_group)) +
+  geom_bar(aes(y = Proportion_Hospitalized, fill = "Hospitalization"), stat = "identity", position = "dodge") +
+  geom_bar(aes(y = Proportion_ICU, fill = "ICU Admission"), stat = "identity", position = "dodge") +
+  labs(x = "Age Group",
+       y = "Proportion",
+       fill = "Outcome") +
+  scale_fill_manual(values = c("Hospitalization" = "blue", "ICU Admission" = "red")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+The insights offered by @fig-hospitalization-vs-age provide a view of the proportional distribution of individuals who required hospitalization or admission to the ICU due to COVID-19 across different age groups. The pattern reveals an exponential increase in these proportions with increasing age, reaching a peak for individuals between 80 to 89 years old where approximately 22% of individuals required hospitalization or ICU admission. This observation further reinforces the narrative that COVID-19 posed heightened risks for older individuals.
+
+```{r}
+#| message: false
+#| echo: false
+#| label: fig-hospitalization-outcome-vs-age
+#| fig-cap: Outcome for those were hospitalised having COVID-19 
+
+# Outcome for those were hospitalised having COVID-19
+
+# Filter data for cases that were hospitalized
+hospitalized_data <- covid19_data %>%
+  filter(hospitalised == "yes")
+
+# Calculate proportions of deaths vs resolved after being hospitalized grouped by age
+outcome_proportions <- hospitalized_data %>%
+  group_by(age_group, outcome) %>%
+  summarise(Count = n()) %>%
+  group_by(age_group) %>%
+  mutate(Proportion = Count / sum(Count))
+
+# Create a side-by-side bar plot
+ggplot(outcome_proportions, aes(x = age_group, y = Proportion, fill = outcome)) +
+  geom_bar(stat = "identity", position = "fill") +
+  labs(x = "Age Group",
+       y = "Proportion",
+       fill = "Outcome") +
+  scale_fill_manual(values = c("fatal" = "red", "resolved" = "green")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+The visualization presented in @fig-hospitalization-outcome-vs-age delves into the proportional dynamics of deaths versus resolved cases after hospitalization across different age groups. The pattern highlights a significant escalation in the proportion of fatalities with increasing age. This observation can be connected with the earlier findings from @fig-hospitalization-vs-age, which underscored the substantial increase in hospitalization proportions with advancing age.
+
+Connecting these insights offers the perspective that as age increases, not only do more individuals require hospitalization, but a considerable number among them succumb to fatal outcomes. This interconnected analysis serves to solidify the overarching conclusion: older individuals are more vulnerable and endangered by COVID-19.
+
+# Conclusion
+
+In conclusion, the comprehensive analysis underscores a visible pattern revealing that older individuals exhibit a heightened vulnerability to a fatal outcome upon contracting COVID-19. This assertion is substantiated by the increase in mortality rates observed in higher age categories. Moreover, the findings illuminate a parallel trend, indicating an elevated likelihood of ICU admission as age progresses. The cumulative evidence strongly suggests that advancing age is a critical determinant in the severity of COVID-19 outcomes, emphasizing the imperative for targeted public health measures and specialized care strategies for the elderly population.
+
+\newpage 
+
+# Appendix
 
 ## Glimpse of the dataset
 
@@ -120,145 +255,19 @@ head(covid19_data) |>
   )
 ```
 
-@tbl-cleaned_covid19_data provides a glimpse of our our cleaned COVID-19 data. We will now use the data to uncover trends and make associations.
+@tbl-cleaned_covid19_data provides a glimpse of the cleaned COVID-19 data. The data was used to uncover trends and make associations.
 
+## Data cleaning
+The data cleaning steps consisted of multiple filtering decision. Those are:
 
-# Results and Discussion 
+- Keeping only confirmed cases. The original dataset included probable cases also but for my analysis, I wanted to find trend among people who were confirmed to have COVID so for precision in trend, I omitted the probable cases.
 
-```{r}
-#| message: false
-#| echo: false
+- Keeping records of cases till Dec 31, 2022. This was because the dataset page documents how criteria and updating methods were changed multiple time throughout 2023. To ensure coherent and similarly-collected data for precision of result, this call was taken.
 
-# age vs number of cases
+- Cases which are still active were removed as analysing the outcome of the case is one of my trends to observe which having active cases would not help.
 
-ggplot(covid19_data, aes(x = age_group)) +
-  geom_bar(fill = "skyblue", color = "black") +
-  labs(title = "COVID-19 Cases by Age Group",
-       x = "Age Group",
-       y = "Number of Cases") +
-  theme_minimal()
-```
+- The last minor cleaning included removing empty age categories as that is a variable of interest and changing the datatype for the Reported date variable.
 
-Plot 1 - We see that the number of cases are higher among younger individuals.
-
-```{r}
-#| message: false
-#| echo: false
-
-## outcome proportions
-
-covid19_data %>%
-  group_by(outcome) %>%
-  summarise(Count = n(), Proportion = n() / nrow(covid19_data))
-```
-
-Plot 2 - We see that while most of the fatalities result in a non-fatal outcome, 1.27% of the cases result in a fatal outcome. While the number might be small, it is 1 in every 100 person which if seen like that is a lot.
-
-```{r}
-#| message: false
-#| echo: false
-
-# trend for age vs fatality
-
-# Create a summary table
-age_outcome_summary <- covid19_data %>%
-  group_by(age_group, outcome) %>%
-  summarise(Count = n()) %>%
-  group_by(age_group) %>%
-  mutate(Proportion = Count / sum(Count))
-
-# Create a stacked bar plot
-ggplot(age_outcome_summary, aes(x = age_group, y = Proportion, fill = outcome)) +
-  geom_bar(stat = "identity", position = "fill") +
-  labs(title = "Fatal vs Resolved Proportion by Age Group",
-       x = "Age Group",
-       y = "Proportion",
-       fill = "Outcome") +
-  scale_fill_manual(values = c("resolved" = "green", "fatal" = "red")) +
-  theme_minimal()
-```
-Plot 3 - We see that the fatalities increase by age.
-
-```{r}
-#| message: false
-#| echo: false
-
-# proportions for hospitalization and icu
-
-# Calculate proportions for hospitalization
-hospitalization_proportions <- prop.table(table(covid19_data$hospitalised))
-
-# Calculate proportions for ICU admission
-icu_proportions <- prop.table(table(covid19_data$icu))
-
-# Create a summary table
-data.frame(
-  Outcome = c("Hospitalization", "ICU Admission"),
-  Proportion = c(hospitalization_proportions["yes"], icu_proportions["yes"])
-)
-
-```
-
-Plot 4 - Not a lot of people in ICU, 4% hospitalised
-
-```{r}
-#| message: false
-#| echo: false
-
-hospitalization_proportions <- covid19_data %>%
-  group_by(age_group) %>%
-  summarise(Proportion_Hospitalized = mean(hospitalised == "yes", na.rm = TRUE))
-
-# Calculate proportions for ICU admission grouped by age
-icu_proportions <- covid19_data %>%
-  group_by(age_group) %>%
-  summarise(Proportion_ICU = mean(icu == "yes", na.rm = TRUE))
-
-# Merge the summaries
-merged_summary <- merge(hospitalization_proportions, icu_proportions, by = c("age_group"))
-
-# Create a bar plot
-ggplot(merged_summary, aes(x = age_group)) +
-  geom_bar(aes(y = Proportion_Hospitalized, fill = "Hospitalization"), stat = "identity", position = "dodge") +
-  geom_bar(aes(y = Proportion_ICU, fill = "ICU Admission"), stat = "identity", position = "dodge") +
-  labs(title = "Proportion of Hospitalization and ICU Admission by Age Group",
-       x = "Age Group",
-       y = "Proportion",
-       fill = "Outcome") +
-  scale_fill_manual(values = c("Hospitalization" = "blue", "ICU Admission" = "red")) +
-  theme_minimal()
-```
-Plot 5 - Hospitalisation and ICU admission proportions increase with age.
-
-```{r}
-#| message: false
-#| echo: false
-
-# Filter data for cases that were hospitalized
-hospitalized_data <- covid19_data %>%
-  filter(hospitalised == "yes")
-
-# Calculate proportions of deaths vs resolved after being hospitalized grouped by age
-outcome_proportions <- hospitalized_data %>%
-  group_by(age_group, outcome) %>%
-  summarise(Count = n()) %>%
-  group_by(age_group) %>%
-  mutate(Proportion = Count / sum(Count))
-
-# Create a side-by-side bar plot
-ggplot(outcome_proportions, aes(x = age_group, y = Proportion, fill = outcome)) +
-  geom_bar(stat = "identity", position = "fill") +
-  labs(title = "Proportion of Deaths vs Resolved Cases after Hospitalization by Age Group",
-       x = "Age Group",
-       y = "Proportion",
-       fill = "Outcome") +
-  scale_fill_manual(values = c("fatal" = "red", "resolved" = "green")) +
-  theme_minimal()
-```
-Plot 6 - Fatalities increase even after hospitalisation as age increases.
-
-# Conclusion
-
-In conclusion, our comprehensive analysis underscores a discernible pattern revealing that older individuals exhibit a heightened vulnerability to a fatal outcome upon contracting COVID-19. This assertion is substantiated by the noteworthy increase in mortality rates observed in higher age categories. Moreover, our findings illuminate a parallel trend, indicating an elevated likelihood of ICU admission as age progresses. The cumulative evidence strongly suggests that advancing age is a critical determinant in the severity of COVID-19 outcomes, emphasizing the imperative for targeted public health measures and specialized care strategies for the elderly population.
+\newpage
 
 # References 
