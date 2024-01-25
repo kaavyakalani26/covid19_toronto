@@ -1,8 +1,8 @@
-# Unmasking the Grim Reality: Age Disparities in COVID-19 Fatality Rates in Toronto
+# Age-Driven Disparities in COVID-19 Fatality Rates – A Toronto Perspective
 
 ## Overview of the Project
 
-This repository contains all the files and documentation for the paper. The paper presents a meticulous analysis of COVID-19 cases in Toronto, emphasizing the disproportionate impact on different age groups. Leveraging data from the City of Toronto's Open Data Library, the study scrutinizes fatality rates, revealing a stark contrast between older and younger demographics.
+This repository contains all the files and documentation for the paper. The paper presents an analysis of COVID-19 cases in Toronto, emphasizing the disproportionate impact on different age groups. Leveraging data from the City of Toronto's Open Data Library, my analysis sheds light on the severity of outcomes, with a particular focus on the vulnerability of older individuals.
 
 ## File Structure
 The repo is structured as:
